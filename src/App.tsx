@@ -1,6 +1,9 @@
 import React from "react";
 import useSWR from "swr";
 
+import bookmarkEmpty from "./bookmark-empty.svg";
+import bookmarkFull from "./bookmark-full.svg";
+
 interface CategoryItem {
   id: number;
   lastModTime: number;
@@ -145,24 +148,57 @@ function App() {
                     <div>
                       {template.sections.map((section) => (
                         <div className="flex flex-col lg:flex-row flex-wrap justify-between">
-                          {section.articles.map((article) => (
-                            <a
-                              href={article.url?.url}
-                              target="_blank"
-                              rel="noopener"
-                              className="mb-8 w-full lg:w-5/12"
-                            >
-                              <h4 className="text-lg">{article.title}</h4>
-                              <p className="text-sm mt-2 font-bold">
-                                {article.publisher}
-                              </p>
-                              <img
-                                className="mt-4 rounded-md"
-                                src={`https://obs.line-scdn.net/${article.thumbnail?.hash}`}
-                                alt=""
-                              />
-                            </a>
-                          ))}
+                          {section.articles.map((article) => {
+                            const currentBookmarks = (JSON.parse(
+                              localStorage.getItem(
+                                "line-haute-bookmarks"
+                              ) as string
+                            ) || []) as Article[];
+
+                            return (
+                              <a
+                                href={article.url?.url}
+                                target="_blank"
+                                rel="noopener"
+                                className="mb-8 w-full lg:w-5/12"
+                              >
+                                <div className="flex items-start">
+                                  <div>
+                                    <h4 className="text-lg">{article.title}</h4>
+                                    <p className="text-sm mt-2 font-bold">
+                                      {article.publisher}
+                                    </p>
+                                  </div>
+                                  <img
+                                    onClick={(event) => {
+                                      event.preventDefault();
+
+                                      localStorage.setItem(
+                                        "line-haute-bookmarks",
+                                        JSON.stringify(
+                                          currentBookmarks.concat(article)
+                                        )
+                                      );
+                                    }}
+                                    src={
+                                      currentBookmarks.findIndex(
+                                        (bookmark) => bookmark.id === article.id
+                                      ) !== -1
+                                        ? bookmarkFull
+                                        : bookmarkEmpty
+                                    }
+                                    alt=""
+                                    className="ml-4 w-6"
+                                  />
+                                </div>
+                                <img
+                                  className="mt-4 rounded-md"
+                                  src={`https://obs.line-scdn.net/${article.thumbnail?.hash}`}
+                                  alt=""
+                                />
+                              </a>
+                            );
+                          })}
                         </div>
                       ))}
                     </div>
