@@ -90,9 +90,45 @@ function App() {
   const { categories, categoryList } = data.result;
   console.log({ categories, categoryList });
 
+  const dummyCategoriItems = [
+    {
+      id: -1,
+      lastModTime: -1,
+      name: "",
+      type: -1,
+    },
+    {
+      id: -1,
+      lastModTime: -1,
+      name: "",
+      type: -1,
+    },
+  ];
+
   return (
-    <div className="bg-blue-500 text-white min-h-screen w-full flex items-center justify-center text-5xl">
-      LINE Heute
+    <div
+      style={{ fontFamily: "Roboto, sans-serif" }}
+      className="bg-gray-50 min-h-screen w-full flex flex-col items-center justify-start p-8"
+    >
+      <div className="w-full lg:w-3xl">
+        <div>
+          <h1 className="text-green-800 font-medium text-3xl">LINE Heute</h1>
+        </div>
+        <div className="flex justify-between flex-wrap mt-12">
+          {categoryList.concat(...dummyCategoriItems).map((categoryItem) =>
+            categoryItem.name ? (
+              <div
+                className="w-32 lg:w-40 border-gray-600 border rounded-lg text-sm lg:text-base text-center p-4 cursor-pointer mb-4"
+                key={categoryItem.id}
+              >
+                {categoryItem.name}
+              </div>
+            ) : (
+              <div className="w-40"></div>
+            )
+          )}
+        </div>
+      </div>
     </div>
   );
 }
