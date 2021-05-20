@@ -128,6 +128,26 @@ function App() {
             )
           )}
         </div>
+        <div className="mt-12">
+          {categories.map((category) => (
+            <div className="mb-12" id={category.name}>
+              <div className="px-6 py-4 bg-gray-800 rounded-lg">
+                <h2 className="text-2xl text-white cursor-default">
+                  {category.name}
+                </h2>
+              </div>
+              <div className="mt-8">
+                {category.templates.map((template) => (
+                  <div className="mb-4 ">
+                    <h3 className="text-lg w-max pb-1 border-b-2 border-gray-800 cursor-default">
+                      {template.title}
+                    </h3>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
