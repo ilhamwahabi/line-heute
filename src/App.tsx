@@ -112,7 +112,7 @@ function App() {
     >
       <div className="w-full lg:w-3xl">
         <div>
-          <h1 className="text-green-800 font-medium text-3xl">LINE Heute</h1>
+          <h1 className="text-blue-900 font-medium text-3xl">LINE Heute</h1>
         </div>
         <div className="flex justify-between flex-wrap mt-12">
           {categoryList.concat(...dummyCategoriItems).map((categoryItem) =>
@@ -138,10 +138,34 @@ function App() {
               </div>
               <div className="mt-8">
                 {category.templates.map((template) => (
-                  <div className="mb-4 ">
-                    <h3 className="text-lg w-max pb-1 border-b-2 border-gray-800 cursor-default">
+                  <div className="mb-4">
+                    <h3 className="text-xl w-max pb-1 border-b-2 border-gray-800 cursor-default mb-8">
                       {template.title}
                     </h3>
+                    <div>
+                      {template.sections.map((section) => (
+                        <div className="flex flex-col lg:flex-row flex-wrap justify-between">
+                          {section.articles.map((article) => (
+                            <a
+                              href={article.url?.url}
+                              target="_blank"
+                              rel="noopener"
+                              className="mb-8 w-full lg:w-5/12"
+                            >
+                              <h4 className="text-lg">{article.title}</h4>
+                              <p className="text-sm mt-2 font-bold">
+                                {article.publisher}
+                              </p>
+                              <img
+                                className="mt-4 rounded-md"
+                                src={`https://obs.line-scdn.net/${article.thumbnail?.hash}`}
+                                alt=""
+                              />
+                            </a>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </div>
