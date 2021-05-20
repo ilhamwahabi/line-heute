@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 
 import bookmarkEmpty from "./bookmark-empty.svg";
 import bookmarkFull from "./bookmark-full.svg";
+
+function useLocalStorage<T>(key: string, initialValue: T) {
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.log(error);
+      return initialValue;
+    }
+  });
+
+  const setValue = (value: T | ((val: T) => T)) => {
+    try {
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return [storedValue, setValue] as const;
+}
 
 interface CategoryItem {
   id: number;
@@ -86,6 +110,12 @@ function App() {
     "https://jsonp.afeld.me/?url=https://today.line.me/id/portaljson",
     fetcher
   );
+  const [bookmarks, setBookmarks] = useLocalStorage<Article[]>(
+    "line-haute-bookmarks",
+    []
+  );
+
+  console.log({ bookmarks });
 
   if (error) return <div>failed to load</div>;
   if (!data) return <div>loading...</div>;
@@ -149,12 +179,6 @@ function App() {
                       {template.sections.map((section) => (
                         <div className="flex flex-col lg:flex-row flex-wrap justify-between">
                           {section.articles.map((article) => {
-                            const currentBookmarks = (JSON.parse(
-                              localStorage.getItem(
-                                "line-haute-bookmarks"
-                              ) as string
-                            ) || []) as Article[];
-
                             return (
                               <a
                                 href={article.url?.url}
@@ -172,16 +196,24 @@ function App() {
                                   <img
                                     onClick={(event) => {
                                       event.preventDefault();
-
-                                      localStorage.setItem(
-                                        "line-haute-bookmarks",
-                                        JSON.stringify(
-                                          currentBookmarks.concat(article)
-                                        )
-                                      );
+                                      if (
+                                        bookmarks.findIndex(
+                                          (bookmark) =>
+                                            bookmark.id === article.id
+                                        ) !== -1
+                                      ) {
+                                        setBookmarks(
+                                          bookmarks.filter(
+                                            (bookmark) =>
+                                              bookmark.id !== article.id
+                                          )
+                                        );
+                                      } else {
+                                        setBookmarks(bookmarks.concat(article));
+                                      }
                                     }}
                                     src={
-                                      currentBookmarks.findIndex(
+                                      bookmarks.findIndex(
                                         (bookmark) => bookmark.id === article.id
                                       ) !== -1
                                         ? bookmarkFull
