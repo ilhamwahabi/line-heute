@@ -1,108 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
 
 import bookmarkEmpty from "../bookmark-empty.svg";
 import bookmarkFull from "../bookmark-full.svg";
 import bookmarkCheck from "../bookmark-check.svg";
-
-function useLocalStorage<T>(key: string, initialValue: T) {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.log(error);
-      return initialValue;
-    }
-  });
-
-  const setValue = (value: T | ((val: T) => T)) => {
-    try {
-      const valueToStore =
-        value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      window.localStorage.setItem(key, JSON.stringify(valueToStore));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  return [storedValue, setValue] as const;
-}
-
-interface CategoryItem {
-  id: number;
-  lastModTime: number;
-  name: string;
-  type: number;
-}
-
-type CategoryList = CategoryItem[];
-
-interface Article {
-  ageLimit: boolean;
-  badgeText: string;
-  categoryId: number;
-  categoryName: string;
-  id: number;
-  postId: string;
-  publishTimeUnix: number;
-  publisher: string;
-  publisherId: string;
-  publisherImageCdnHash: string;
-  source: string;
-  status: string;
-  thumbnail: {
-    type: string;
-    hash: string;
-    quality: number;
-  };
-  title: string;
-  type: number;
-  url: {
-    hash: string;
-    url: string;
-  };
-}
-
-interface Category {
-  allAdLazyloadingOn: boolean;
-  id: number;
-  lastModTime: number;
-  name: string;
-  order: number;
-  rankingList: null;
-  source: number;
-  type: number;
-  templates: {
-    id: string;
-    type: number;
-    sections: {
-      type: number;
-      articles: Article[];
-    }[];
-    title?: string;
-    layoutId?: number;
-    meta?: {
-      categoryId: number;
-      displayUserName: boolean;
-      personalizedTitle: string;
-    };
-  }[];
-}
-
-type Categories = Category[];
-
-interface Response {
-  code: number;
-  message: string;
-  result: {
-    lastModTime: number;
-    parentCategoryId: number;
-    categories: Categories;
-    categoryList: CategoryList;
-  };
-}
+import useLocalStorage from "../hooks/useLocalStorage";
+import { Article, Response } from "../types";
 
 const fetcher = (input: RequestInfo, init: RequestInit | undefined) =>
   fetch(input, init).then((res) => res.json());
