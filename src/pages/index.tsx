@@ -2,11 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
 
-import bookmarkEmpty from "../bookmark-empty.svg";
-import bookmarkFull from "../bookmark-full.svg";
 import bookmarkCheck from "../bookmark-check.svg";
-import useLocalStorage from "../hooks/useLocalStorage";
-import { Article, Response } from "../types";
+import { Response } from "../types";
+import Card from "../components/Card";
 
 const fetcher = (input: RequestInfo, init: RequestInit | undefined) =>
   fetch(input, init).then((res) => res.json());
@@ -15,10 +13,6 @@ function Home() {
   const { data, error } = useSWR<Response>(
     "https://jsonp.afeld.me/?url=https://today.line.me/id/portaljson",
     fetcher
-  );
-  const [bookmarks, setBookmarks] = useLocalStorage<Article[]>(
-    "line-haute-bookmarks",
-    []
   );
 
   if (error) return <div>failed to load</div>;
@@ -88,63 +82,7 @@ function Home() {
                             <div className="flex flex-col lg:flex-row flex-wrap justify-between">
                               {section.articles.map((article) => {
                                 if (!article.title) return null;
-
-                                return (
-                                  <a
-                                    href={article.url?.url}
-                                    target="_blank"
-                                    rel="noopener"
-                                    className="mb-8 w-full lg:w-5/12"
-                                  >
-                                    <div className="flex items-start">
-                                      <div>
-                                        <h4 className="text-lg">
-                                          {article.title}
-                                        </h4>
-                                        <p className="text-sm mt-2 font-bold">
-                                          {article.publisher}
-                                        </p>
-                                      </div>
-                                      <img
-                                        onClick={(event) => {
-                                          event.preventDefault();
-                                          if (
-                                            bookmarks.findIndex(
-                                              (bookmark) =>
-                                                bookmark.id === article.id
-                                            ) !== -1
-                                          ) {
-                                            setBookmarks(
-                                              bookmarks.filter(
-                                                (bookmark) =>
-                                                  bookmark.id !== article.id
-                                              )
-                                            );
-                                          } else {
-                                            setBookmarks(
-                                              bookmarks.concat(article)
-                                            );
-                                          }
-                                        }}
-                                        src={
-                                          bookmarks.findIndex(
-                                            (bookmark) =>
-                                              bookmark.id === article.id
-                                          ) !== -1
-                                            ? bookmarkFull
-                                            : bookmarkEmpty
-                                        }
-                                        alt=""
-                                        className="ml-4 w-6"
-                                      />
-                                    </div>
-                                    <img
-                                      className="mt-4 rounded-md"
-                                      src={`https://obs.line-scdn.net/${article.thumbnail?.hash}`}
-                                      alt=""
-                                    />
-                                  </a>
-                                );
+                                return <Card article={article} />;
                               })}
                             </div>
                           ))}
