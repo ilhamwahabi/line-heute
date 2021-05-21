@@ -47,11 +47,13 @@ function Card(props: { article: Article }) {
           className="ml-4 w-6"
         />
       </div>
-      <img
-        className="mt-4 rounded-md"
-        src={`https://obs.line-scdn.net/${article.thumbnail?.hash}`}
-        alt=""
-      />
+      {article.thumbnail?.hash && (
+        <img
+          className="mt-4 rounded-md"
+          src={`https://obs.line-scdn.net/${article.thumbnail.hash}`}
+          alt=""
+        />
+      )}
     </a>
   );
 }

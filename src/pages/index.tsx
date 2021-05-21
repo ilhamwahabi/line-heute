@@ -43,26 +43,28 @@ function Home() {
           <h1 className="text-gray-700 font-medium text-3xl">LINE Heute</h1>
         </Link>
         <div className="flex justify-between flex-wrap mt-12">
-          {categoryList.concat(...dummyCategoriItems).map((categoryItem) =>
-            categoryItem.name ? (
-              <a
-                href={`#${categoryItem.name}`}
-                className="w-32 lg:w-40 border-gray-600 border-4 rounded-lg text-sm lg:text-base text-center p-4 cursor-pointer mb-4 hover:bg-gray-600 hover:text-white transition"
-                key={categoryItem.id}
-              >
-                {categoryItem.name}
-              </a>
-            ) : (
-              <div className="w-40"></div>
-            )
-          )}
+          {categoryList
+            .concat(...dummyCategoriItems)
+            .map((categoryItem, categoryItemIndex) =>
+              categoryItem.name ? (
+                <a
+                  href={`#${categoryItem.name}`}
+                  className="w-32 lg:w-40 border-gray-600 border-4 rounded-lg text-sm lg:text-base text-center p-4 cursor-pointer mb-4 hover:bg-gray-600 hover:text-white transition"
+                  key={categoryItem.id}
+                >
+                  {categoryItem.name}
+                </a>
+              ) : (
+                <div className="w-40" key={categoryItemIndex}></div>
+              )
+            )}
         </div>
         <div className="mt-8">
           {categories.map((category) => {
             // if (!category.name) return null;
 
             return (
-              <div className="pt-4 mb-12" id={category.name}>
+              <div className="pt-4 mb-12" id={category.name} key={category.id}>
                 <div className="px-6 py-4 bg-gray-800 rounded-lg">
                   <h2 className="text-2xl text-white cursor-default">
                     {category.name}
@@ -73,16 +75,21 @@ function Home() {
                     // if (!template.title) return null;
 
                     return (
-                      <div className="mb-4">
+                      <div className="mb-4" key={template.id}>
                         <h3 className="text-xl w-max pb-1 border-b-2 border-gray-800 cursor-default mb-8">
                           {template.title}
                         </h3>
                         <div>
-                          {template.sections.map((section) => (
-                            <div className="flex flex-col lg:flex-row flex-wrap justify-between">
+                          {template.sections.map((section, sectionIndex) => (
+                            <div
+                              className="flex flex-col lg:flex-row flex-wrap justify-between"
+                              key={sectionIndex}
+                            >
                               {section.articles.map((article) => {
                                 if (!article.title) return null;
-                                return <Card article={article} />;
+                                return (
+                                  <Card article={article} key={article.id} />
+                                );
                               })}
                             </div>
                           ))}

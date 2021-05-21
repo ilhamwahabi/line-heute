@@ -22,7 +22,7 @@ function Bookmark() {
         <div className="flex flex-col lg:flex-row flex-wrap justify-between mt-12">
           {bookmarks.map((article) => {
             if (!article.title) return null;
-            return <Card article={article} />;
+            return <Card article={article} key={article.id} />;
           })}
         </div>
       </div>
