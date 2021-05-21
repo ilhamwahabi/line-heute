@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import useSWR from "swr";
 
 import bookmarkEmpty from "../bookmark-empty.svg";
 import bookmarkFull from "../bookmark-full.svg";
+import bookmarkCheck from "../bookmark-check.svg";
 
 function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -139,9 +141,9 @@ function Home() {
   return (
     <div className="bg-gray-50 min-h-screen w-full flex flex-col items-center justify-start p-8">
       <div className="w-full lg:w-3xl">
-        <div>
+        <Link to="/">
           <h1 className="text-gray-700 font-medium text-3xl">LINE Heute</h1>
-        </div>
+        </Link>
         <div className="flex justify-between flex-wrap mt-12">
           {categoryList.concat(...dummyCategoriItems).map((categoryItem) =>
             categoryItem.name ? (
@@ -252,6 +254,13 @@ function Home() {
           })}
         </div>
       </div>
+      <Link to="/bookmark">
+        <img
+          src={bookmarkCheck}
+          className="fixed right-0 bottom-0 p-8"
+          alt=""
+        />
+      </Link>
     </div>
   );
 }
