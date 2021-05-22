@@ -20,6 +20,9 @@ export default function App() {
               <Home />
             </Route>
           </Switch>
+          <div className="text-center border-t border-gray-300 pt-12 pb-4 text-gray-700 mt-12">
+            &copy; 2021 Ilham Wahabi. All rights reserved.
+          </div>
         </div>
       </div>
     </Router>
