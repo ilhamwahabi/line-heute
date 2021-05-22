@@ -1,4 +1,5 @@
 import React from "react";
+import toast from "react-hot-toast";
 
 import bookmarkEmpty from "../bookmark-empty.svg";
 import bookmarkFull from "../bookmark-full.svg";
@@ -34,8 +35,10 @@ function Card(props: { article: Article }) {
               setBookmarks(
                 bookmarks.filter((bookmark) => bookmark.id !== article.id)
               );
+              toast.error("Bookmark telah dihapus");
             } else {
               setBookmarks(bookmarks.concat(article));
+              toast.success("Sukses menambahkan bookmark");
             }
           }}
           src={

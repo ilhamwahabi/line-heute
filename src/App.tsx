@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import toast, { Toaster, useToasterStore } from "react-hot-toast";
 
 import Home from "./pages/index";
 import Bookmark from "./pages/bookmark";
 
 export default function App() {
+  const { toasts } = useToasterStore();
+
+  useEffect(() => {
+    toasts
+      .filter((t) => t.visible)
+      .filter((_, i) => i >= 1)
+      .forEach((t) => toast.dismiss(t.id));
+  }, [toasts]);
+
   return (
     <Router>
       <div className="bg-gray-50 min-h-screen w-full flex flex-col items-center justify-start p-8">
@@ -25,6 +35,7 @@ export default function App() {
           </div>
         </div>
       </div>
+      <Toaster />
     </Router>
   );
 }
