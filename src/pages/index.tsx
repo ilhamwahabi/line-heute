@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import useSWR from "swr";
 
-import bookmarkCheck from "../bookmark-check.svg";
+import bookmarkCheck from "/bookmark-check.svg";
 import { Response } from "../types";
 import Card from "../components/Card";
 

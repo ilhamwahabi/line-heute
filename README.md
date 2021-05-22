@@ -4,7 +4,7 @@ Display news data from LINE Today API. You can bookmark an article(s) and it wil
 
 Tech stack:
 
-- `React` with `Typescript`
+- `React` with `Typescript` with `Vite`
 - `Windi CSS` for styling
 - `Splitbee` for analytics
 - `Netlify` for deployment

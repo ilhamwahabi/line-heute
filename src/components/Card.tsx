@@ -1,8 +1,8 @@
 import React from "react";
 import toast from "react-hot-toast";
 
-import bookmarkEmpty from "../bookmark-empty.svg";
-import bookmarkFull from "../bookmark-full.svg";
+import bookmarkEmpty from "/bookmark-empty.svg";
+import bookmarkFull from "/bookmark-full.svg";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { Article } from "../types";
 
